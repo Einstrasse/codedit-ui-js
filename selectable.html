@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Hello vanila js</title>
+		<meta charset='utf-8'>
+		<link rel="stylesheet" type="text/css" href="./css/style.css">
+	</head>
+	<body>
+		<script src="./js/windowFrame.js"></script>
+		<div id="container">
+			
+		</div>
+		
+		<script>
+			var mainFrame = new Frame();
+			mainFrame.add(new Item("First One"));
+			mainFrame.add(new Item("Second One"));
+			mainFrame.vertical = true;
+			
+			var rightFrame = new Frame();
+			rightFrame.vertical = false;
+			rightFrame.add(new Item("Right First"));
+			rightFrame.add(new Item("Right Second"));
+			rightFrame.add(new Item("Right Third"));
+			
+			mainFrame.add(rightFrame);
+			
+			var container = document.getElementById("container");
+			container.innerHTML = mainFrame.render();
+			container.addEventListener("click", clickEvtListener);
+		</script>
+	</body>
+</html>
