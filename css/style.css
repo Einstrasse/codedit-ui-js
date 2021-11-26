@@ -1,0 +1,18 @@
+.frame {
+	border: solid black 1px;
+}
+
+.item {
+	padding: 5px;
+	margin: 2px;
+	border: dotted red 1px;
+}
+
+.horizontal-container {
+	display: flex;
+	flex-flow: row;
+}
+.vertical-container {
+	display: flex;
+	flex-flow: column;
+}
