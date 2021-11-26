@@ -2,6 +2,10 @@
 	border: solid black 1px;
 }
 
+.selected {
+	background-color: green;
+}
+
 .item {
 	padding: 5px;
 	margin: 2px;

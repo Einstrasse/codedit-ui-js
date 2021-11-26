@@ -25,7 +25,9 @@
 			
 			mainFrame.add(rightFrame);
 			
-			document.getElementById("container").innerHTML = mainFrame.render();
+			var container = document.getElementById("container");
+			container.innerHTML = mainFrame.render();
+			container.addEventListener("click", clickEvtListener);
 		</script>
 	</body>
 </html>

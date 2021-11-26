@@ -1,15 +1,30 @@
+function clickEvtListener(e) {
+	var target = e.target;
+	if (target && target.classList && target.classList.contains('selectable')) {
+		if (target.classList.contains("selected")) {
+			target.classList.remove("selected");
+		} else {
+			target.classList.add("selected");
+		}
+			
+	}
+}
+
 function Item(content) {
+	this.parent = false; //detach시 parent 값 확인 필요
 	this.content = content || "Hello javascript";
 	this.render = function() {
-		return `<div class="item border">${this.content}</div>`;
+		return `<div class="item border selectable">${this.content}</div>`;
 	}
 	return this;
 }
 
 function Frame() {
+	this.parent = false; //detach시 parent 값 확인 필요
 	this.children = [];
-	this.vertical = false;
+	this.vertical = false; // false 시 horizontal
 	this.add = function(child) {
+		child.parent = this;
 		this.children.push(child);
 	}
 	this.get = function(index) {
