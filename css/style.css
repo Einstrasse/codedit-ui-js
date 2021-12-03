@@ -10,6 +10,7 @@
 	padding: 5px;
 	margin: 2px;
 	border: dotted red 1px;
+	min-height: 40px;
 }
 
 .horizontal-container {
