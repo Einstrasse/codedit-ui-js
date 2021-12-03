@@ -11,6 +11,21 @@
 	margin: 2px;
 	border: dotted red 1px;
 	min-height: 40px;
+	overflow: hidden;
+	flex-grow: 100;
+}
+.resizable {
+	position: relative;
+}
+.row-resize {
+	cursor: row-resize;
+	height: 2px;
+	background-color: green;
+}
+.col-resize {
+	cursor: col-resize;
+	width: 2px;
+	background-color: green;
 }
 
 .horizontal-container {

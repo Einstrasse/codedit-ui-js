@@ -11,13 +11,22 @@ Frame은 아이템을 가로 또는 세로로만 배열할 수 있다.
 - [x] Selectable Component
 - [x] Uniquely selectable item in same Frame
 - [x] Strong binding between javascript object and HTML element
-- [ ] Relative Size representation
 - [ ] Component resize support
+	- [x] Item Column Resizable
+	- [ ] Item Row Resizable
+- [ ] Relative Size representation
 - [ ] Component drag and relocation support
+
+## Bug To Fix
+- [ ] Resize 핸들 누를 시, 처음에 크기가 탁 튀는 현상
 
 ## References
 ### CSS & HTML Layout related
 - https://stackoverflow.com/questions/29517722/html-align-div-children-horizontally
+- https://developer.mozilla.org/ko/docs/Web/API/HTML_Drag_and_Drop_API
 ### js related
 - https://developer.mozilla.org/ko/docs/Web/API/EventTarget/addEventListener
 - https://stackoverflow.com/questions/33471716/lazy-binding-click-event-on-elements-not-on-dom
+### Examples
+- https://developer.mozilla.org/ko/docs/Web/API/Document/drag_event
+- https://stackoverflow.com/questions/28767221/flexbox-resizing
