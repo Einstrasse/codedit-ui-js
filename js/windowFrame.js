@@ -3,6 +3,7 @@ function Item(content) {
 	this.content = content || "Hello javascript";
 	this.width = false;
 	this.dom = false;
+	this.resize = function() {}
 	var self = this;
 	this.render = function() {
 		self.dom = document.createElement('div');
@@ -32,8 +33,11 @@ function Resizer() {
 	this.posX = false;
 	var self = this;
 	this.resize = function(e) { //가로 resize 기준
-		const dx = self.posX - e.x;
-		self.posX = e.x;
+		var dx = 0;
+		if (e && e.x) {
+			var dx = self.posX - e.x;
+			self.posX = e.x;
+		}
 		if (self.prev && self.next) {
 			var prevOldSize = parseInt(getComputedStyle(self.prev.dom, '').width);
 			var nextOldSize = parseInt(getComputedStyle(self.next.dom, '').width);
@@ -41,14 +45,6 @@ function Resizer() {
 			var nextNewSize = nextOldSize + dx;
 			self.prev.dom.style.width = prevNewSize + "px";
 			self.next.dom.style.width = nextNewSize + "px";
-			// var sumSize = prevNewSize + nextNewSize;
-			// var prevGrow = Number(getComputedStyle(self.prev.dom).flexGrow);
-			// var nextGrow = Number(getComputedStyle(self.next.dom).flexGrow);
-			// var sumGrow = prevGrow + nextGrow;
-			// var prevGrowNew = sumGrow * (prevNewSize / sumSize);
-			// var nextGrowNew = sumGrow * (nextNewSize / sumSize);
-			// self.prev.dom.style.flexGrow = prevGrowNew;
-			// self.next.dom.style.flexGrow = nextGrowNew;
 		}
 	}
 	this.render = function() {
@@ -56,11 +52,9 @@ function Resizer() {
 		self.dom.classList.add(`${self.vertical ? "row" : "col"}-resize`);
 		self.dom.addEventListener("mousedown", (e) => {
 			self.posX = e.x;
-			console.log("Register!");
 			document.addEventListener("mousemove", self.resize, false);
 		});
 		document.addEventListener("mouseup", ()=>{
-			console.log("Release!");
 			document.removeEventListener("mousemove", self.resize, false);
 		});
 		return self.dom;
@@ -75,6 +69,11 @@ function Frame() {
 	this.selectedItem = false;
 	this.dom = false;
 	var self = this;
+	this.resize = function() {
+		for (var i=0; i < this.children.length; i++) {
+			this.children[i].resize();
+		}
+	}
 	this.select = function(selectedItem) {
 		if (self.parent === false) { //Root Item에서만 수행함
 			var prev = self.selectedItem;

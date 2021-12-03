@@ -18,7 +18,7 @@ Frame은 아이템을 가로 또는 세로로만 배열할 수 있다.
 - [ ] Component drag and relocation support
 
 ## Bug To Fix
-- [ ] Resize 핸들 누를 시, 처음에 크기가 탁 튀는 현상
+- [x] Resize 핸들 누를 시, 처음에 크기가 탁 튀는 현상
 
 ## References
 ### CSS & HTML Layout related
