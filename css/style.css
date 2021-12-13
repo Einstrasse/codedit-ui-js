@@ -12,7 +12,7 @@
 	border: dotted red 1px;
 	min-height: 40px;
 	overflow: hidden;
-	flex-grow: 100;
+	/* flex-grow: 1; */
 }
 .resizable {
 	position: relative;

@@ -1,10 +1,20 @@
 function Item(content) {
+	var self = this;
 	this.parent = false; //detach시 parent 값 확인 필요
 	this.content = content || "Hello javascript";
 	this.width = false;
 	this.dom = false;
 	this.resize = function() {}
-	var self = this;
+	this.init = function(size) { //크기 지정한 resize
+		if (size) {
+			if (size.width){
+				self.dom.style.width = size.width;
+			}
+			if (size.height) {
+				self.dom.style.height = size.height;
+			}
+		}
+	}
 	this.render = function() {
 		self.dom = document.createElement('div');
 		self.dom.classList.add("item");
@@ -32,10 +42,14 @@ function Resizer() {
 	this.dom = false;
 	this.posX = false;
 	var self = this;
-	this.resize = function(e) { //가로 resize 기준
+	this.init = () => {};
+	this.resize = function(e) { //가로 resize 기준, event resize
+		if (e && (e.width || e.height))  {
+			return;
+		}
 		var dx = 0;
 		if (e && e.x) {
-			var dx = self.posX - e.x;
+			dx = self.posX - e.x;
 			self.posX = e.x;
 		}
 		if (self.prev && self.next) {
@@ -70,8 +84,24 @@ function Frame() {
 	this.dom = false;
 	var self = this;
 	this.resize = function() {
-		for (var i=0; i < this.children.length; i++) {
+		for (var i=0; i< this.children.length; i++) {
 			this.children[i].resize();
+		}
+	}
+	this.init = function() {
+		var width;
+		var height;
+		if (this.vertical === false) {
+			width = 200 / (this.children.length+1) + "%";
+			height = "auto";
+		} else {
+			width = "auto";
+			height = 200 / (this.children.length+1) + "%";
+		}
+		for (var i=0; i < this.children.length; i++) {
+			this.children[i].init({
+				width: width
+			});
 		}
 	}
 	this.select = function(selectedItem) {
