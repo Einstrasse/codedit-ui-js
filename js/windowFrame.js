@@ -53,12 +53,27 @@ function Resizer() {
 			self.posX = e.x;
 		}
 		if (self.prev && self.next) {
-			var prevOldSize = parseInt(getComputedStyle(self.prev.dom, '').width);
-			var nextOldSize = parseInt(getComputedStyle(self.next.dom, '').width);
+			var prevOldSize = parseFloat(getComputedStyle(self.prev.dom, '').width);
+			var nextOldSize = parseFloat(getComputedStyle(self.next.dom, '').width);
 			var prevNewSize = prevOldSize - dx;
 			var nextNewSize = nextOldSize + dx;
-			self.prev.dom.style.width = prevNewSize + "px";
-			self.next.dom.style.width = nextNewSize + "px";
+			if (self.prev.dom.style.width.indexOf("%") !== -1 && self.next.dom.style.width.indexOf("%") !== -1) {
+				var parentSize = parseFloat(getComputedStyle(self.parent.dom, '').width);
+				var prevOldPercentSize = parseFloat(self.prev.dom.style.width);
+				var nextOldPercentSize = parseFloat(self.next.dom.style.width);
+				var totalOldPercentSize = prevOldPercentSize + nextOldPercentSize;
+				var prevNewPercentSize = prevNewSize / parentSize * 100;
+				var nextNewPercentSize = nextNewSize / parentSize * 100;
+				var totalNewPercentSize = prevNewPercentSize + nextNewPercentSize;
+				var calibration = totalOldPercentSize / totalNewPercentSize;
+				prevNewPercentSize *= calibration;
+				nextNewPercentSize *= calibration;
+				self.prev.dom.style.width = prevNewPercentSize + "%";
+				self.next.dom.style.width = nextNewPercentSize + "%";
+			} else {
+				self.prev.dom.style.width = prevNewSize + "px";
+				self.next.dom.style.width = nextNewSize + "px";
+			}
 		}
 	}
 	this.render = function() {
