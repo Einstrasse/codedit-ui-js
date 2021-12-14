@@ -41,9 +41,10 @@ function Resizer() {
 	this.next = false;
 	this.dom = false;
 	this.posX = false;
+	this.posY = false;
 	var self = this;
 	this.init = () => {};
-	this.resize = function(e) { //가로 resize 기준, event resize
+	this.resizeX = (e) => {
 		if (e && (e.width || e.height))  {
 			return;
 		}
@@ -75,12 +76,58 @@ function Resizer() {
 				self.next.dom.style.width = nextNewSize + "px";
 			}
 		}
+	};
+	this.resizeY = (e) => {
+		if (e && (e.width || e.height))  {
+			return;
+		}
+		var dy = 0;
+		if (e && e.y) {
+			dy = self.posY - e.y;
+			self.posY = e.y;
+		}
+		if (self.prev && self.next) {
+			var prevOldSize = parseFloat(getComputedStyle(self.prev.dom, '').height);
+			var nextOldSize = parseFloat(getComputedStyle(self.next.dom, '').height);
+			var prevNewSize = prevOldSize - dy;
+			var nextNewSize = nextOldSize + dy;
+			if (self.prev.dom.style.height.indexOf("%") !== -1 && self.next.dom.style.height.indexOf("%") !== -1) {
+				var parentSize = parseFloat(getComputedStyle(self.parent.dom, '').height);
+				var prevOldPercentSize = parseFloat(self.prev.dom.style.height);
+				var nextOldPercentSize = parseFloat(self.next.dom.style.height);
+				var totalOldPercentSize = prevOldPercentSize + nextOldPercentSize;
+				var prevNewPercentSize = prevNewSize / parentSize * 100;
+				var nextNewPercentSize = nextNewSize / parentSize * 100;
+				var totalNewPercentSize = prevNewPercentSize + nextNewPercentSize;
+				var calibration = totalOldPercentSize / totalNewPercentSize;
+				prevNewPercentSize *= calibration;
+				nextNewPercentSize *= calibration;
+				self.prev.dom.style.height = prevNewPercentSize + "%";
+				self.next.dom.style.height = nextNewPercentSize + "%";
+			} else {
+				var totalOldSize = prevOldSize + nextOldSize;
+				var totalNewSize = prevNewSize + nextNewSize;
+				var calibration = totalOldSize / totalNewSize;
+				prevNewSize *= calibration;
+				nextNewSize *= calibration;
+				self.prev.dom.style.height = prevNewSize + "px";
+				self.next.dom.style.height = nextNewSize + "px";
+			}
+		}
+	};
+	this.resize = function(e) { //가로 resize 기준, event resize
+		if (self.vertical) {
+			self.resizeY(e);
+		} else {
+			self.resizeX(e);
+		}
 	}
 	this.render = function() {
 		self.dom = document.createElement('div');
 		self.dom.classList.add(`${self.vertical ? "row" : "col"}-resize`);
 		self.dom.addEventListener("mousedown", (e) => {
 			self.posX = e.x;
+			self.posY = e.y;
 			document.addEventListener("mousemove", self.resize, false);
 		});
 		document.addEventListener("mouseup", ()=>{
@@ -104,6 +151,21 @@ function Frame() {
 		}
 	}
 	this.init = function() {
+		if (self.parent === false) {
+			self.dom.style.height = "100%";
+			self.dom.style.width = "100%";
+		} else {
+			var numChild = self.parent.children.length;
+			var parentVertical = self.parent.vertical;
+			var portion = 100 * 2 / (numChild + 1);
+			if (parentVertical) {
+				self.dom.style.height = portion + "%";
+				self.dom.style.width = "100%";
+			} else {
+				self.dom.style.height = "100%";
+				self.dom.style.width = portion + "%";
+			}
+		}
 		var width;
 		var height;
 		if (this.vertical === false) {
@@ -115,7 +177,8 @@ function Frame() {
 		}
 		for (var i=0; i < this.children.length; i++) {
 			this.children[i].init({
-				width: width
+				width: width,
+				height: height
 			});
 		}
 	}

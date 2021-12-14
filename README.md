@@ -11,14 +11,16 @@ Frame은 아이템을 가로 또는 세로로만 배열할 수 있다.
 - [x] Selectable Component
 - [x] Uniquely selectable item in same Frame
 - [x] Strong binding between javascript object and HTML element
-- [ ] Component resize support
+- [x] Component resize support
 	- [x] Item Column Resizable
-	- [ ] Item Row Resizable
+	- [x] Item Row Resizable
 - [ ] Relative Size representation
 - [ ] Component drag and relocation support
+- [ ] Set default size weight API providing
 
 ## Bug To Fix
 - [x] Resize 핸들 누를 시, 처음에 크기가 탁 튀는 현상
+	- Border, Margin, Resizer등의 크기를 생각하지 않고 코드를 작성하여서 생긴 문제. 크기 비율을 할당하고 비율에 맞게 재조정한 뒤 적용하니 해결됨
 
 ## References
 ### CSS & HTML Layout related
