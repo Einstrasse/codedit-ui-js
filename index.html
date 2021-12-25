@@ -11,7 +11,7 @@
 			
 		</div>
 		<hr>
-		<button>
+		<button onclick="addTop();">
 			Add top
 		</button>
 		<button>
@@ -29,6 +29,7 @@
 		</button>
 		
 		<script>
+			var index = 1;
 			var mainFrame = new Frame();
 			mainFrame.vertical = true;
 			mainFrame.add(new Item("First One"));
@@ -45,6 +46,13 @@
 			var container = document.getElementById("container");
 			container.appendChild(mainFrame.render());
 			mainFrame.init();
+			
+			function addTop() {
+				if (mainFrame.selectedItem === false) return;
+				mainFrame.selectedItem.addTop(new Item("New #" + index++));
+				container.replaceChildren(mainFrame.render());
+				mainFrame.init();
+			}
 			
 			function removeItem() {
 				if (mainFrame.selectedItem === false) return;

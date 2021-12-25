@@ -18,7 +18,7 @@ Frame은 아이템을 가로 또는 세로로만 배열할 수 있다.
 - [ ] Item add and remove support
 	- [x] Item remove
 	- [ ] Item add
-		- [ ] Item add top
+		- [x] Item add top
 		- [ ] Item add bottom
 		- [ ] Item add left
 		- [ ] Item add right

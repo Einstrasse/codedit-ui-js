@@ -4,6 +4,92 @@ function Item(content) {
 	this.content = content || "Hello javascript";
 	this.width = false;
 	this.dom = false;
+	this.normalize = function() {
+		/*
+		orientation이 일관된 구조가 되도록 bottom-up 식으로 노말라이즈함
+		*/
+		if (this.parent === false) return;
+		this.parent.normalize();
+	}
+	this.addTop = function(newItem) {
+		if (self.parent === false) {
+			console.log("Error: try to addTop to root Frame");
+			return;
+		}
+		if (self.parent.vertical === true) {
+			return self.prepend(newItem);
+		} else if (self.parent.children.length === 1) {
+			self.parent.vertical = true;
+			return self.prepend(newItem);
+		}
+		var newFrame = new Frame();
+		newFrame.vertical = self.parent.vertical;
+		/*
+		바로 add하게 되면 parent, child의 hierachy때문에 꼬일 수 있으므로
+		tmp 배열을 한번 활용한다.
+		*/
+		var copyList = [];
+		for (var i=0; i < self.parent.children.length; i+=2) {
+			copyList.push(self.parent.children[i]);
+		}
+		/*
+		add에 의해 지금 self.parent가 바뀔 수 있으므로 순서가 중요함.
+		self.parent.parent가 vertical인 경우 어떻게 할 것인지 체크 중요
+		-> Normalize로 처리함
+		*/
+		self.parent.clear();
+		self.parent.vertical = true;
+		self.parent.add(newItem);
+		self.parent.add(newFrame);
+		copyList.forEach(item => {
+			item.content = item.content + "Changed"; //debug
+			newFrame.add(item);
+		});
+		self.normalize();
+	}
+	this.prepend = function(newItem) {
+		//스스로 앞에 새 newItem을 추가, 방향 신경 안씀
+		if (this.parent === false ) {
+			console.log("Error: try to prepend to root Frame");
+			return;
+		}
+		var oldList = this.parent.children;
+		var newList = [];
+		for (var i=0; i < oldList.length; i+=2) {
+			if (this === oldList[i]) {
+				newList.push(newItem); //prepend
+			}
+			newList.push(oldList[i]);
+		}
+		// this.parent.children = [];
+		// this.parent.items = [];
+		this.parent.clear();
+		newList.forEach(item => {
+			this.parent.add(item);
+		});
+	}
+	this.append = function(newItem) {
+		//스스로 뒤에 새 newItem을 추가, 방향 신경 안씀
+		if (this.parent === false ) {
+			console.log("Error: try to prepend to root Frame");
+			return;
+		}
+		var oldList = this.parent.children;
+		var newList = [];
+		for (var i=0; i < oldList.length; i+=2) {
+			newList.push(oldList[i]);
+			if (this === oldList[i]) { //append
+				newList.push(newItem);
+			}
+		}
+		this.parent.clear();
+		// this.parent.children = [];
+		// this.parent.items = [];
+		
+		newList.forEach(item => {
+			this.parent.add(item);
+		});
+	}
 	this.remove = function() {
 		//스스로를 제거 - Item의 remove랑 동일
 		if (this.parent === false) {
@@ -16,7 +102,8 @@ function Item(content) {
 			if (this === oldList[i]) continue;
 			newList.push(oldList[i]);
 		}
-		this.parent.children = [];
+		this.parent.clear();
+		// this.parent.children = [];
 		newList.forEach(item => {
 			this.parent.add(item);
 		});
@@ -161,11 +248,42 @@ function Resizer() {
 function Frame() {
 	this.parent = false; //detach시 parent 값 확인 필요
 	this.children = [];
+	this.items = [];
 	this.vertical = false; // false 시 horizontal, 이 값이 바뀔 때 resizer에도 propagation이 되야함..
 	this.width = false;
 	this.selectedItem = false;
 	this.dom = false;
 	var self = this;
+	this.clear = function() {
+		self.children = [];
+		self.items = [];
+	}
+	this.normalize = function() {
+		/*
+		orientation이 일관된 구조가 되도록 bottom-up 식으로 노말라이즈함
+		*/
+		var changed = false;
+		var newList = [];
+		self.items.forEach(item => {
+			if (self.vertical === item.vertical) {
+				changed = true;
+				newList = newList.concat(item.items);
+			} else {
+				newList.push(item);
+			}
+		});
+		
+		if (changed) {
+			self.clear();
+			newList.forEach(item => {
+				self.add(item);
+			});
+		}
+		if (this.parent !== false) {
+			this.parent.normalize();
+		}
+		
+	}
 	this.remove = function() {
 		//스스로를 제거 - Item의 remove랑 동일
 		if (this.parent === false) {
@@ -178,7 +296,8 @@ function Frame() {
 			if (this === oldList[i]) continue;
 			newList.push(oldList[i]);
 		}
-		this.parent.children = [];
+		//this.parent.children = [];
+		this.parent.clear();
 		newList.forEach(item => {
 			this.parent.add(item);
 		});
@@ -247,6 +366,7 @@ function Frame() {
 			self.children.push(resizer);
 		}
 		self.children.push(child);
+		self.items.push(child);
 	}
 	this.get = function(index) {
 		return self.children[index];
