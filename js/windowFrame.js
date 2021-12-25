@@ -27,7 +27,7 @@ function Item(content) {
 		}
 		self.dom.addEventListener("click", (e) => {
 			if (self.parent && self.parent.select && typeof self.parent.select === 'function') {
-				self.parent.select(self.dom);
+				self.parent.select(self);
 			}
 		});
 		return self.dom;
@@ -184,12 +184,12 @@ function Frame() {
 	}
 	this.select = function(selectedItem) {
 		if (self.parent === false) { //Root Item에서만 수행함
-			var prev = self.selectedItem;
+			var prev = self.selectedItem.dom;
 			if (prev && prev.classList && prev.classList.contains("selected")) {
 				prev.classList.remove("selected");
 			}
 			self.selectedItem = selectedItem;
-			self.selectedItem.classList.add("selected");
+			self.selectedItem.dom.classList.add("selected");
 		} else if (typeof self.parent.select === 'function') {
 			self.parent.select(selectedItem);
 		}
