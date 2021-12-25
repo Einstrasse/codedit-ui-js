@@ -16,6 +16,12 @@ Frame은 아이템을 가로 또는 세로로만 배열할 수 있다.
 	- [x] Item Row Resizable
 - [ ] Relative Size representation
 - [ ] Item add and remove support
+	- [x] Item remove
+	- [ ] Item add
+		- [ ] Item add top
+		- [ ] Item add bottom
+		- [ ] Item add left
+		- [ ] Item add right
 - [ ] Component drag and relocation support
 - [ ] Set default size weight API providing
 

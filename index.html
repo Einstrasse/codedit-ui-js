@@ -10,6 +10,23 @@
 		<div id="container" style="height: 500px;">
 			
 		</div>
+		<hr>
+		<button>
+			Add top
+		</button>
+		<button>
+			Add bottom
+		</button>
+		<button>
+			Add left
+		</button>
+		<button>
+			Add right
+		</button>
+		<br />
+		<button onclick="removeItem();">
+			Remove
+		</button>
 		
 		<script>
 			var mainFrame = new Frame();
@@ -28,6 +45,13 @@
 			var container = document.getElementById("container");
 			container.appendChild(mainFrame.render());
 			mainFrame.init();
+			
+			function removeItem() {
+				if (mainFrame.selectedItem === false) return;
+				mainFrame.selectedItem.remove();
+				container.replaceChildren(mainFrame.render());
+				mainFrame.init();
+			}
 		</script>
 	</body>
 </html>

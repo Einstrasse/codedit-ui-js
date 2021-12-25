@@ -4,6 +4,27 @@ function Item(content) {
 	this.content = content || "Hello javascript";
 	this.width = false;
 	this.dom = false;
+	this.remove = function() {
+		//스스로를 제거 - Item의 remove랑 동일
+		if (this.parent === false) {
+			console.log("Error: try to delete root item");
+			return;
+		}
+		var oldList = this.parent.children;
+		var newList = [];
+		for (var i=0; i < oldList.length; i+=2) {
+			if (this === oldList[i]) continue;
+			newList.push(oldList[i]);
+		}
+		this.parent.children = [];
+		newList.forEach(item => {
+			this.parent.add(item);
+		});
+		if (this.parent.children.length === 0) {
+			//Frame이 빈 것이 되면 Frame도 삭제
+			this.parent.remove();
+		}
+	}
 	this.resize = function() {}
 	this.init = function(size) { //크기 지정한 resize
 		if (size) {
@@ -145,6 +166,27 @@ function Frame() {
 	this.selectedItem = false;
 	this.dom = false;
 	var self = this;
+	this.remove = function() {
+		//스스로를 제거 - Item의 remove랑 동일
+		if (this.parent === false) {
+			console.log("Error: try to delete root item");
+			return;
+		}
+		var oldList = this.parent.children;
+		var newList = [];
+		for (var i=0; i < oldList.length; i+=2) {
+			if (this === oldList[i]) continue;
+			newList.push(oldList[i]);
+		}
+		this.parent.children = [];
+		newList.forEach(item => {
+			this.parent.add(item);
+		});
+		if (this.parent.children.length === 0) {
+			//Frame이 빈 것이 되면 Frame도 삭제
+			this.parent.remove();
+		}
+	}
 	this.resize = function() {
 		for (var i=0; i< this.children.length; i++) {
 			this.children[i].resize();
