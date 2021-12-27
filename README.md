@@ -15,19 +15,20 @@ Frame은 아이템을 가로 또는 세로로만 배열할 수 있다.
 	- [x] Item Column Resizable
 	- [x] Item Row Resizable
 - [ ] Relative Size representation
-- [ ] Item add and remove support
+- [x] Item add and remove support
 	- [x] Item remove
-	- [ ] Item add
+	- [x] Item add
 		- [x] Item add top
-		- [ ] Item add bottom
-		- [ ] Item add left
-		- [ ] Item add right
+		- [x] Item add bottom
+		- [x] Item add left
+		- [x] Item add right
 - [ ] Component drag and relocation support
 - [ ] Set default size weight API providing
 
 ## Bug To Fix
 - [x] Resize 핸들 누를 시, 처음에 크기가 탁 튀는 현상
 	- Border, Margin, Resizer등의 크기를 생각하지 않고 코드를 작성하여서 생긴 문제. 크기 비율을 할당하고 비율에 맞게 재조정한 뒤 적용하니 해결됨
+- [ ] Remove했을 때 Frame 안에 Item 하나만 남은 경우 처리
 
 ## References
 ### CSS & HTML Layout related

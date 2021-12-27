@@ -14,13 +14,13 @@
 		<button onclick="addTop();">
 			Add top
 		</button>
-		<button>
+		<button onclick="addBottom();">
 			Add bottom
 		</button>
-		<button>
+		<button onclick="addLeft();">
 			Add left
 		</button>
-		<button>
+		<button onclick="addRight();">
 			Add right
 		</button>
 		<br />
@@ -50,6 +50,27 @@
 			function addTop() {
 				if (mainFrame.selectedItem === false) return;
 				mainFrame.selectedItem.addTop(new Item("New #" + index++));
+				container.replaceChildren(mainFrame.render());
+				mainFrame.init();
+			}
+			
+			function addBottom() {
+				if (mainFrame.selectedItem === false) return;
+				mainFrame.selectedItem.addBottom(new Item("New #" + index++));
+				container.replaceChildren(mainFrame.render());
+				mainFrame.init();
+			}
+			
+			function addLeft() {
+				if (mainFrame.selectedItem === false) return;
+				mainFrame.selectedItem.addLeft(new Item("New #" + index++));
+				container.replaceChildren(mainFrame.render());
+				mainFrame.init();
+			}
+			
+			function addRight() {
+				if (mainFrame.selectedItem === false) return;
+				mainFrame.selectedItem.addRight(new Item("New #" + index++));
 				container.replaceChildren(mainFrame.render());
 				mainFrame.init();
 			}

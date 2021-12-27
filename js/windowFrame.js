@@ -12,6 +12,7 @@ function Item(content) {
 		this.parent.normalize();
 	}
 	this.addTop = function(newItem) {
+		//방향 신경써서 위쪽에 새 아이템을 추가하는 함수
 		if (self.parent === false) {
 			console.log("Error: try to addTop to root Frame");
 			return;
@@ -23,28 +24,127 @@ function Item(content) {
 			return self.prepend(newItem);
 		}
 		var newFrame = new Frame();
-		newFrame.vertical = self.parent.vertical;
+		newFrame.vertical = true;
 		/*
 		바로 add하게 되면 parent, child의 hierachy때문에 꼬일 수 있으므로
 		tmp 배열을 한번 활용한다.
 		*/
 		var copyList = [];
-		for (var i=0; i < self.parent.children.length; i+=2) {
-			copyList.push(self.parent.children[i]);
-		}
-		/*
-		add에 의해 지금 self.parent가 바뀔 수 있으므로 순서가 중요함.
-		self.parent.parent가 vertical인 경우 어떻게 할 것인지 체크 중요
-		-> Normalize로 처리함
-		*/
-		self.parent.clear();
-		self.parent.vertical = true;
-		self.parent.add(newItem);
-		self.parent.add(newFrame);
-		copyList.forEach(item => {
-			item.content = item.content + "Changed"; //debug
-			newFrame.add(item);
+		self.parent.items.forEach(item => {
+			if (item === self) { //원래 자신의 위치에 newFrame을 넣는다.
+				copyList.push(newFrame);
+			} else {
+				copyList.push(item);	
+			}
 		});
+		self.parent.clear();
+		copyList.forEach(item => {
+			self.parent.add(item);
+		});
+		newFrame.add(newItem); //새 아이템을 집어넣는다.
+		newFrame.add(self);
+		self.normalize();
+	}
+	this.addBottom = function(newItem) {
+		//방향 신경써서 아래쪽에 새 아이템을 추가하는 함수
+		if (self.parent === false) {
+			console.log("Error: try to addTop to root Frame");
+			return;
+		}
+		if (self.parent.vertical === true) {
+			return self.append(newItem);
+		} else if (self.parent.children.length === 1) {
+			self.parent.vertical = true;
+			return self.append(newItem);
+		}
+		var newFrame = new Frame();
+		newFrame.vertical = true;
+		/*
+		바로 add하게 되면 parent, child의 hierachy때문에 꼬일 수 있으므로
+		tmp 배열을 한번 활용한다.
+		*/
+		var copyList = [];
+		self.parent.items.forEach(item => {
+			if (item === self) { //원래 자신의 위치에 newFrame을 넣는다.
+				copyList.push(newFrame);
+			} else {
+				copyList.push(item);	
+			}
+		});
+		self.parent.clear();
+		copyList.forEach(item => {
+			self.parent.add(item);
+		});
+		newFrame.add(self);
+		newFrame.add(newItem); //새 아이템을 집어넣는다.
+		self.normalize();
+	}
+	this.addLeft = function(newItem) {
+		//방향 신경써서 왼쪽에 새 아이템을 추가하는 함수
+		if (self.parent === false) {
+			console.log("Error: try to addTop to root Frame");
+			return;
+		}
+		if (self.parent.vertical === false) {
+			return self.prepend(newItem);
+		} else if (self.parent.children.length === 1) {
+			self.parent.vertical = false;
+			return self.prepend(newItem);
+		}
+		var newFrame = new Frame();
+		newFrame.vertical = false;
+		/*
+		바로 add하게 되면 parent, child의 hierachy때문에 꼬일 수 있으므로
+		tmp 배열을 한번 활용한다.
+		*/
+		var copyList = [];
+		self.parent.items.forEach(item => {
+			if (item === self) { //원래 자신의 위치에 newFrame을 넣는다.
+				copyList.push(newFrame);
+			} else {
+				copyList.push(item);	
+			}
+		});
+		self.parent.clear();
+		copyList.forEach(item => {
+			self.parent.add(item);
+		});
+		newFrame.add(newItem); //새 아이템을 집어넣는다.
+		newFrame.add(self);
+		self.normalize();
+	}
+	this.addRight = function(newItem) {
+		//방향 신경써서 오른쪽에 새 아이템을 추가하는 함수
+		if (self.parent === false) {
+			console.log("Error: try to addTop to root Frame");
+			return;
+		}
+		if (self.parent.vertical === false) {
+			return self.append(newItem);
+		} else if (self.parent.children.length === 1) {
+			self.parent.vertical = false;
+			return self.append(newItem);
+		}
+		var newFrame = new Frame();
+		newFrame.vertical = false;
+		/*
+		바로 add하게 되면 parent, child의 hierachy때문에 꼬일 수 있으므로
+		tmp 배열을 한번 활용한다.
+		*/
+		var copyList = [];
+		self.parent.items.forEach(item => {
+			if (item === self) { //원래 자신의 위치에 newFrame을 넣는다.
+				copyList.push(newFrame);
+			} else {
+				copyList.push(item);	
+			}
+		});
+		self.parent.clear();
+		copyList.forEach(item => {
+			self.parent.add(item);
+		});
+		newFrame.add(self);
+		newFrame.add(newItem); //새 아이템을 집어넣는다.
 		self.normalize();
 	}
 	this.prepend = function(newItem) {
